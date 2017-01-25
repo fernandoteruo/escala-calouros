@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <base target="_top">
+</head>
+
+<body>
+    <h4>Não feche esta aba, ela irá oferecer informações úteis e feedbacks do processamento</h4>
+    <div id="bar"></div>
+    <div id="log"></div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script>
+        $(function() {
+            google.script.run.withSuccessHandler(onSuccess).getProps();
+        });
+
+        function onSuccess(properties) {
+            var log = $("#log");
+            log.empty();
+            log.append('<ul>');
+            for (var i = 0; i < properties.length; i++) {
+                if (properties[i].key.slice(0,18) == "Validação - Erros ") {
+                    log.append('<li style="color:red;">' + properties[i].key + " - " + properties[i].value + '</li>');   
+                } else if (properties[i].key != "errCount") {
+                    log.append('<li>' + properties[i].key + " - " + properties[i].value + '</li>');
+                }
+            }
+            log.append('</ul>');
+            google.script.run.withSuccessHandler(onSuccess).getProps();
+        }
+    </script>
+</body>
+
+</html>
