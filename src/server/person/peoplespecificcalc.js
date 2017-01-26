@@ -5,7 +5,7 @@
  */
 function peopleSpecificCalc_(people, deps) {
 	var person, i, j;
-
+	Logger.log("Realiza cálculos de departamento especifíco");
 	for (i = 0; i < people.length; i++) {
 		person = people[i];
 		if (person.areaOD || person.areaENF) {

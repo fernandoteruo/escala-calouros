@@ -38,7 +38,7 @@ function deptsAvailable_(people, depts) {
 		department = depts[i];
 		numberDepts = 0;
 		for (j = 0; j < randomDepts.length; j++) {
-			if (randomDepts[j] == department) {
+			if (randomDepts[j].name == department.name) {
 				numberDepts++;
 			}
 		}
@@ -61,24 +61,28 @@ function deptsAvailable_(people, depts) {
 		loopWhileDiffPos:
 			while (diff > 0) {
 				for (i = 0; i < ratePresentMin.length; i++) {
-					if (diff === 0) {
-						break loopWhileDiffPos;
-					}
-					if (ratePresentMin[i].rate == worstRate && ratePresentMin[i].qtd == deparmentsLess && ratePresentMin[i].qtd + 1 <= depts[i].maxAll) {
-						randomDepts.push(depts[i]);
-						ratePresentMin[i].qtd++;
-						ratePresentMin[i].rate++;
-						diff--;
+					for (j = 0; j < depts.length; j++) {
+						if (diff === 0) {
+							break loopWhileDiffPos;
+						}
+						if (ratePresentMin[i].department.name == depts[j].name && ratePresentMin[i].rate == worstRate && ratePresentMin[i].qtd == deparmentsLess && ratePresentMin[i].qtd + 1 <= depts[j].maxAll) {
+							randomDepts.push(depts[j]);
+							ratePresentMin[i].qtd++;
+							ratePresentMin[i].rate++;
+							diff--;
+						}
 					}
 				}
 				numbWorstRate = 0;
 				numbDepartmentLess = 0;
 				for (i = 0; i < ratePresentMin.length; i++) {
-					if (ratePresentMin[i].rate == worstRate && ratePresentMin[i].qtd + 1 <= depts[i].maxAll) {
-						numbWorstRate++;
-					}
-					if (ratePresentMin[i].qtd == deparmentsLess && ratePresentMin[i].qtd + 1 <= depts[i].maxAll) {
-						numbDepartmentLess++;
+					for (j = 0; j < depts.length; j++) {
+						if (ratePresentMin[i].department.name == depts[i].name && ratePresentMin[i].rate == worstRate && ratePresentMin[i].qtd + 1 <= depts[j].maxAll) {
+							numbWorstRate++;
+						}
+						if (ratePresentMin[i].department.name == depts[i].name && ratePresentMin[i].qtd == deparmentsLess && ratePresentMin[i].qtd + 1 <= depts[j].maxAll) {
+							numbDepartmentLess++;
+						}
 					}
 				}
 				worstRate = numbWorstRate === 0 ? worstRate + 1 : worstRate;
@@ -87,14 +91,13 @@ function deptsAvailable_(people, depts) {
 	} else if (diff < 0) {
 		shuffle_(ratePresentMin);
 		loopWhileDiffNeg:
-			while (diff < 0) { 
-				loopForRandom: 
+			while (diff < 0) {
 				for (i = 0; i < randomDepts.length; i++) {
 					for (j = 0; j < ratePresentMin.length; j++) {
 						if (diff === 0) {
 							break loopWhileDiffNeg;
 						}
-						if (randomDepts[i] !== undefined && randomDepts[i].nome == ratePresentMin[j].department.nome && ratePresentMin[j].qtd == deparmentsMore && ratePresentMin[j].rate == bestRate) {
+						if (randomDepts[i] !== undefined && randomDepts[i].name == ratePresentMin[j].department.name && ratePresentMin[j].qtd == deparmentsMore && ratePresentMin[j].rate == bestRate) {
 							randomDepts.splice(i, 1);
 							ratePresentMin[j].qtd--;
 							ratePresentMin[j].rate--;
@@ -121,24 +124,28 @@ function deptsAvailable_(people, depts) {
  * @return {Object}       Deparments that need people
  */
 function searchLessMore_(depts) {
-  var lessMen = 1000;
-  var lessWomen = 1000;
-  var lessAll = 1000;
-  var moreMen = -1000;
-  var moreWomen = -1000;
-  var moreAll = -1000;
-  var i;
-  for (i = 0; i < depts.length; i++) {
-    lessMen = depts[i].presentMen < lessMen ? depts[i].presentMen : lessMen;
-    lessWomen = depts[i].presentWomen < lessWomen ? depts[i].presentWomen : lessWomen;
-    lessAll = depts[i].presentAll < lessAll ? depts[i].presentAll : lessAll;
-    moreMen = depts[i].presentMen > moreMen ? depts[i].presentMen : moreMen;
-    moreWomen = depts[i].presentWomen > moreWomen ? depts[i].presentWomen : moreWomen;
-    moreAll = depts[i].presentAll > moreAll ? depts[i].presentAll : moreAll;
-  }
-  
-  return {lessMen: lessMen,lessWomen: lessWomen, lessAll: lessAll, 
-          moreMen: moreMen, moreWomen: moreWomen, moreAll: moreAll};
+	var lessMen = 1000;
+	var lessWomen = 1000;
+	var lessAll = 1000;
+	var moreMen = -1000;
+	var moreWomen = -1000;
+	var moreAll = -1000;
+	var i;
+	for (i = 0; i < depts.length; i++) {
+		lessMen = depts[i].presentMen < lessMen ? depts[i].presentMen : lessMen;
+		lessWomen = depts[i].presentWomen < lessWomen ? depts[i].presentWomen : lessWomen;
+		lessAll = depts[i].presentAll < lessAll ? depts[i].presentAll : lessAll;
+		moreMen = depts[i].presentMen > moreMen ? depts[i].presentMen : moreMen;
+		moreWomen = depts[i].presentWomen > moreWomen ? depts[i].presentWomen : moreWomen;
+		moreAll = depts[i].presentAll > moreAll ? depts[i].presentAll : moreAll;
+	}
+
+	return {
+		lessMen: lessMen,
+		lessWomen: lessWomen,
+		lessAll: lessAll,
+		moreMen: moreMen,
+		moreWomen: moreWomen,
+		moreAll: moreAll
+	};
 }
-
-

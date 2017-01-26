@@ -18,22 +18,28 @@ function onEditSs(e, sheetId) {
 	var lastRow = sheet.getLastRow();
 	var validator;
 	if (e.source.getSheetName() == 'EscalaTurnos' && e.range.getRow() > 2 && e.range.getRow() <= lastRow && e.range.getColumn() > 4 && e.range.getColumn() < 20) {
-		Logger.log("Realizando edição de turnos manualmente...\n\n");
-		setStartProps_("Etapa 0", "Realizando edição de turnos manualmente...");
 		if (e.range.getColumn() != 5) {
 			shift = e.range.getColumn() - 5;
+			Logger.log("Realizando edição manual de turno " + shift + " manualmente...\n\n");
+			writeLog_(sheetId);
+			setLog_("Etapa 0", "Realizando edição de turno " + shift + " manualmente...\n\n");
+
 			updateTotalShifts_(shift, sheetId);
 			consolidateToDepartmentView_(shift, sheetId);
 			validator = validator_(shift, sheetId);
 			if (validator.status) {
-				setProp_("Etapa 1 - Erros", "Ver erros abaixo");
 				Logger.log(validator.msg);
+				writeLog_(sheetId);
+				writeErroOnSheet_(sheetId);
+				setLog_("Etapa 1 - Erros", "Ver erros abaixo");
 			} else {
-				setProp_("Etapa 1", "Não foram encontrados erros");
+				Logger.log("Validação realizada com sucesso, não há erros\n");
+				writeLog_(sheetId);
+				setLog_("Etapa 1", "Não foram encontrados erros");
 			}
 		}
 		Logger.log("Edição de turnos manual finalizada... \n\n");
-		setProp_("Etapa 2", "Fim de edição manual");
+		setLog_("Etapa 2", "Fim de edição manual");
 		writeLog_(sheetId);
 	}
 }
@@ -50,6 +56,8 @@ function getShiftToCalc(sheetId) {
 
 	if (response.getSelectedButton() == ui.Button.OK && response.getResponseText() != " ") {
 		Logger.log("Turno a ser calculado: " + response.getResponseText());
+		writeLog_(sheetId);
 		executeShiftCalc_(parseInt(response.getResponseText()), sheetId);
 	}
 }
+

@@ -4,6 +4,7 @@
  */
 function consolidateToDepartmentView_(shiftNumber, sheetId) {
 	Logger.log("Consolidando informações de turnos para conferência em VisaoDepto...");
+	writeLog_(sheetId);
 	var CME_H = 1;
 	var CME_M = 2;
 	var CME_N = 3;

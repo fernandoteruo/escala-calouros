@@ -6,6 +6,7 @@
  */
 function writeDepartment_(result, color, lineSheet, sheetId) {
 	Logger.log("Realizando escrita de informações em aba VisaoDepto...");
+	writeLog_(sheetId);
 	var ss = getSpreadsheet_(sheetId);
 	var sheet = ss.getSheetByName("VisaoDepto");
 

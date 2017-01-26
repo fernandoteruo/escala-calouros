@@ -1,7 +1,8 @@
-function updateTotalShifts_(shiftMum, sheetId) {
+function updateTotalShifts_(shiftNum, sheetId) {
 	Logger.log("Calculando atualização de total de shift...");
+	writeLog_(sheetId);
 	var i, j, shift, person, department;
-	var people = readPeople_(shiftMum, sheetId);
+	var people = readPeople_(shiftNum, sheetId);
 	var cme;
 	var enf;
 	var nut;

@@ -5,6 +5,7 @@
  */
 function readPeople_(shift, sheetId) {
 	Logger.log("Leitura de calouros");
+	writeLog_(sheetId);
 	var ss = getSpreadsheet_(sheetId);
 	var sheet = ss.getSheetByName("EscalaTurnos");
 	var START_ROW = 3;

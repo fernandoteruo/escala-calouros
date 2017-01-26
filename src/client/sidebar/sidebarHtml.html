@@ -14,22 +14,22 @@
     <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
     <script>
         $(function() {
-            google.script.run.withSuccessHandler(onSuccess).getProps();
+            google.script.run.withSuccessHandler(onSuccess).getLogs();
         });
 
-        function onSuccess(properties) {
+        function onSuccess(logs) {
             var log = $("#log");
             log.empty();
             log.append('<ul>');
-            for (var i = 0; i < properties.length; i++) {
-                if (properties[i].key.slice(0,18) == "Validação - Erros ") {
-                    log.append('<li style="color:red;">' + properties[i].key + " - " + properties[i].value + '</li>');   
-                } else if (properties[i].key != "errCount") {
-                    log.append('<li>' + properties[i].key + " - " + properties[i].value + '</li>');
+            for (var i = 0; i < logs.length; i++) {
+                if (logs[i].key == "Validação - Erros") {
+                    log.append('<li style="color:red;">' + logs[i].key + " - " + logs[i].value + '</li>');   
+                } else if (logs[i].key !== ""){
+                    log.append('<li>' + logs[i].key + " - " + logs[i].value + '</li>');
                 }
             }
             log.append('</ul>');
-            google.script.run.withSuccessHandler(onSuccess).getProps();
+            google.script.run.withSuccessHandler(onSuccess).getLogs();
         }
     </script>
 </body>

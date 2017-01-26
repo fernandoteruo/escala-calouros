@@ -45,7 +45,6 @@ gulp.task('upload-latest', ['copy-latest'], shell.task(['gapps upload'],
 // Completion of "clean-deployment" is a prerequisite for starting the copy
 // process.
 gulp.task('copy-latest', ['clean-deployment'], function() {
-  copyEnvironmentSpecific();
   copyServerCode();
   copyClientCode();
 });
@@ -73,26 +72,6 @@ function copyClientCode() {
         }
         return path;
       }))
-      .pipe(gulp.dest(dstRoot));
-}
-
-// Does any environment specific work.
-// the "lint" step is also here, as that is only done on "dev"
-// targeted updates.
-function copyEnvironmentSpecific() {
-  // Do target environment specific work
-  switch (options.env) {
-    case 'dev':
-      gulp.src(srcRoot + '/**/*.js')
-          .pipe(jshint())
-          .pipe(jshint.reporter('jshint-stylish'));
-      break;
-
-    default:
-      break;
-  }
-
-  return gulp.src(srcRoot + '/environments/' + options.env + '/*.js')
       .pipe(gulp.dest(dstRoot));
 }
 

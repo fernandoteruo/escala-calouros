@@ -7,17 +7,24 @@
  */
 function checkPeople_(people, shiftNum, sheetId) {
 	var errors = 0;
-	var i, person;
+	var msgs = "";
+	var i, person, msg;
 	for (i = 0; i < people.length; i++) {
 		person = people[i];
-		if (searchTimesDeparment_(person, person.shift) > 1 && searchTotalShifts_(person) < 11) {
+		if (person.shift != "XXX" && searchTimesDeparment_(person, person.shift) > 1 && searchTotalShifts_(person) < 10) {
 			errors++;
-			if (searcPreviousShift_(person, shiftNum, sheetId) == person.shift) {
-				errors++;
-			}
+			msg = "O calouro " + person.name + " já passou no depto " + person.shift + " - verifique o erro nas colunas 'T' a 'AD' da aba 'EscalaTurnos' e ajuste manualmente\n";
+			msgs += msg;
+			setLogErr_(msg);
+		}
+		if (person.shift != "XXX" && searcPreviousShift_(person, shiftNum, sheetId) == person.shift) {
+			errors++;
+			msg = "O calouro " + person.name + " passou no depto " + person.shift + " da última vez Evite repetir turnos em dias consecutivos\n";
+			msgs += msg;
+			setLogErr_(msg);
 		}
 	}
-	return errors;
+	return {qtd: errors, msgs: msgs};
 }
 
 /**
@@ -28,7 +35,7 @@ function checkPeople_(people, shiftNum, sheetId) {
  */
 function checkAlready_(person, department) {
 	var times = 0;
-	switch (department.nome) {
+	switch (department.name) {
 		case 'CME':
 			times = person.cme;
 			break;
@@ -68,5 +75,3 @@ function checkAlready_(person, department) {
 	}
 	return false;
 }
-
-

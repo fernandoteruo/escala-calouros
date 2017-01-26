@@ -4,6 +4,7 @@
  */
 function readDepts_(sheetId) {
 	Logger.log("Leitura de departamentos");
+	writeLog_(sheetId);
 	var ss = getSpreadsheet_(sheetId);
 	var sheet = ss.getSheetByName("RequisicaoDepto");
 
@@ -43,7 +44,7 @@ function objectDep_(deps) {
 			minWomen: deps[i][MINWOMEN],
 			maxAll: deps[i][MAXALL],
 			maxMen: deps[i][MAXMEN],
-			maxWoMen: deps[i][MAXWOMEN],
+			maxWomen: deps[i][MAXWOMEN],
 			presentAll: 0,
 			presentArea: 0,
 			presentMen: 0,

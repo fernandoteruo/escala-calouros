@@ -36,29 +36,32 @@ function checkEnfStatus_(depts) {
 function checkMinDept_(depts) {
 	var errors = 0;
 	var msgs = "";
-	var department, i;
+	var department, i, msg;
 	for (i = 0; i < depts.length; i++) {
 		department = depts[i];
 		if (department.presentAll < department.minAll) {
 			errors++;
-			msgs += "O depto " + department.name + " possui menos calouros do que o minímo. Possui: " + department.presentAll + ", esperado" + department.minAll + "\n";
-
-			setErrProp_("Validação - Erros ", "O depto " + department.name + " possui menos calouros do que o minímo. Possui: " + department.presentAll + ", esperado" + department.minAll + "\n");
+			msg = "O depto " + department.name + " possui menos calouros do que o minímo. Possui: " + department.presentAll + ", esperado " + department.minAll + "\n";
+			msgs += msg;
+			setLogErr_(msg);
 		}
 		if (department.presentMen < department.minMen) {
 			errors++;
-			msgs += "O depto " + department.name + " possui menos homens do que o minímo. Possui: " + department.presentMen + ", esperado" + department.minMen + "\n";
-			setErrProp_("Validação - Erros ", "O depto " + department.name + " possui menos homens do que o minímo. Possui: " + department.presentMen + ", esperado" + department.minMen + "\n");
+			msg = "O depto " + department.name + " possui menos homens do que o minímo. Possui: " + department.presentMen + ", esperado " + department.minMen + "\n";
+			msgs += msg;
+			setLogErr_(msg);
 		}
 		if (department.presentWomen < department.minWomen) {
 			errors++;
-			msgs += "O depto " + department.name + " possui menos mulheres do que o minímo. Possui: " + department.presentWomen + ", esperado " + department.minWomen + "\n";
-			setErrProp_("Validação - Erros ", "O depto " + department.name + " possui menos mulheres do que o minímo. Possui: " + department.presentWomen + ", esperado " + department.minWomen + "\n");
+			msg = "O depto " + department.name + " possui menos mulheres do que o minímo. Possui: " + department.presentWomen + ", esperado " + department.minWomen + "\n";
+			msgs += msg;
+			setLogErr_(msg);
 		}
 		if (department.presentArea < department.minArea) {
 			errors++;
-			msgs += "O depto " + department.name + " possui menos calouros da área do que o minímo. Possui: " + department.presentArea + ", esperado " + department.minArea + "\n";
-			setErrProp_("Validação - Erros ", "O depto " + department.name + " possui menos calouros da área do que o minímo. Possui: " + department.presentArea + ", esperado " + department.minArea + "\n");
+			msg = "O depto " + department.name + " possui menos calouros da área do que o minímo. Possui: " + department.presentArea + ", esperado " + department.minArea + "\n";
+			msgs += msg;
+			setLogErr_(msg);
 		}
 	}
 
@@ -77,13 +80,30 @@ function checkEquilibrium_(depts) {
 	var errors = 0;
 	var max = -1000;
 	var min = 1000;
-	var i;
+	var numMax = 0;
+	var numMin = 0;
+	var i, msg;
+	var deptsMore = [];
+	var deptsLess = [];
 	for (i = 0; i < depts.length; i++) {
 		max = depts[i].presentAll > max ? depts[i].presentAll : max;
 		min = depts[i].presentAll < min ? depts[i].presentAll : min;
 	}
 	if (max - min <= 1) {
-		return 0;
+		return {qtd: 0, msgs: ""};
 	}
-	return max - min;
+
+	for (i = 0; i < depts.length; i++) {
+		if (depts[i].presentAll == max) {
+			deptsMore.push(depts[i].name);
+			numMax++;
+		} else if (depts[i].presentAll == min) {
+			deptsLess.push(depts[i].name);	
+			numMin++;
+		}
+	}
+
+	msg = "" + deptsMore.toString() + " possuem " + max + " calouros, enquanto " + deptsLess.toString() + " tem apenas " + min + ". Confira o erro na aba VisaoDepto, para evitar este problema adeque o máximo dos deptos de acordo com a qtd de calouros na aba RequisicaoDepto\n";
+	setLogErr_(msg);
+	return {qtd: numMax - numMin, msgs: msg};
 }

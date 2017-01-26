@@ -3,6 +3,8 @@
  * @param  {Object[]} people Array of people
  */
 function writeShift_(people, shift, sheetId) {
+	Logger.log("Realizando escrita de turno");
+	writeLog_(sheetId);
 	var i; 
 	var ROW = 3;
 	var NUMBER_COLUMN = 1;
@@ -22,6 +24,7 @@ function writeShift_(people, shift, sheetId) {
  */
 function writeTotal_(people, sheetId) {
 	Logger.log("Realizando escrita total de turnos de people...");
+	writeLog_(sheetId);
 	var ROW = 3;
 	var COLUMN = 20;
 	var NUMBER_COLUMN = 11;
